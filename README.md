@@ -8,8 +8,8 @@ Prototype of CANSAT which will be exhibited during Capstone Event on January 202
 # Missions
 
 Satellite
-Put on its LED when the spread command comes in.
-Read illumination value and send it to Ground-Control.
+- Put on its LED when the spread command comes in.
+- Read illumination value and send it to Ground-Control.
 
 Ground-Control
 - Connect with Satellite by using Bluetooth or Wifi.
@@ -19,5 +19,4 @@ Ground-Control
 - Command Satellite to fold its wing stably.
   
   
-  
-  released version 0.0.0 (2020 08 01)
+Released version 0.0.0 (2020 08 01)
