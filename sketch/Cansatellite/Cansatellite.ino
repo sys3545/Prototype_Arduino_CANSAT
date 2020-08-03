@@ -1,5 +1,5 @@
 #include <SoftwareSerial.h>
-SoftwareSerial MySerial(A0, A1);
+
 char inStr[6]="";
 int i=0;
 
@@ -16,8 +16,10 @@ void loop() {
     else{
       inStr[i++]=msg;
     }
+    
     if(i==4){
       Serial.write(inStr);
     }
+    
   }
 }
