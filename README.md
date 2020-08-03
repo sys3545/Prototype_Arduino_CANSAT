@@ -8,7 +8,7 @@
 # Missions
 
 Satellite
-- Put on its LED when the spread command comes in.
+- Turn on its LED when the spread command comes in.
 - Read illumination value and send it to Ground-Control.
 
 Ground-Control
