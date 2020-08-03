@@ -21,4 +21,4 @@ Ground-Control
 # Version
 Released version 0.0.0 (2020 08 01)
 Released version 0.0.1 (2020 08 03)
-- Test Serial with Arduino and Ground_Control by using USB port (COM3)
+ Test Serial with Arduino and Ground_Control by using USB port (COM3)
