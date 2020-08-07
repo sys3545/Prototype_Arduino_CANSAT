@@ -1,7 +1,10 @@
 #include <stdio.h>
+#include <iostream>
 #include <tchar.h>
 #include "SerialClass.h"	// Library described above
 #include <string>
+
+using namespace std;
 
 // application reads from the specified serial port and reports the collected data
 int main()
@@ -18,20 +21,25 @@ int main()
 	int dataLength = 255;
 	int readResult = 0;
 
-	char helloCommand[6] = "$hllo";
-	char onCommand[6] = "$onnn";
-
+	char onCommand[6] = "$tuon";
+	char offCommand[6] = "$tuof";
+	int mode;
 	
 
 	while (SP->IsConnected())
 	{
-		SP->WriteData(helloCommand, 6);
+		printf("Enter the number of Command (1 is on, 2 is off) : ");
+		cin >> mode;
+		if (mode == 1)
+			SP->WriteData(onCommand, 6);
+		else
+			SP->WriteData(offCommand, 6);
 
 		readResult = SP->ReadData(incomingData, dataLength);
 		// printf("Bytes read: (0 means no data available) %i\n",readResult);
 		incomingData[readResult] = 0;
 
-		printf("%s", incomingData);
+		printf("%s\n", incomingData);
 
 		Sleep(500);
 	}
