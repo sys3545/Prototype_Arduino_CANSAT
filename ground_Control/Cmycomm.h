@@ -1,14 +1,14 @@
 #pragma once
-#ifndef SERIALCLASS_H_INCLUDED
-#define SERIALCLASS_H_INCLUDED
-
-#define ARDUINO_WAIT_TIME 2000
-
+#include <afxwin.h>
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-class Serial
+#define ARDUINO_WAIT_TIME 2000
+
+
+class Cmycomm :
+	public CCmdTarget
 {
 private:
     //Serial comm handler
@@ -22,10 +22,10 @@ private:
 
 public:
     //Initialize Serial communication with the given COM port
-    Serial(const char* portName);
+    Cmycomm(const char* portName);
 
     //Close the connection
-    ~Serial();
+    ~Cmycomm();
 
     //Read data in a buffer, if nbChar is greater than the
     //maximum number of bytes available, it will return only the
@@ -39,7 +39,5 @@ public:
 
     //Check if we are actually connected
     bool IsConnected();
-
 };
 
-#endif // SERIALCLASS_H_INCLUDED
