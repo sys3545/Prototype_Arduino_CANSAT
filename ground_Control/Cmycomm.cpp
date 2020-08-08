@@ -1,7 +1,10 @@
-#include "SerialClass.h"
+#include "pch.h"
+#include "Cmycomm.h"
+
+#include "Cmycomm.h"
 #include <tchar.h>
 
-Serial::Serial(const char* portName)
+Cmycomm::Cmycomm(const char* portName)
 {
     //We're not yet connected
     this->connected = false;
@@ -71,7 +74,7 @@ Serial::Serial(const char* portName)
 
 }
 
-Serial::~Serial()
+Cmycomm::~Cmycomm()
 {
     //Check if we are connected before trying to disconnect
     if (this->connected)
@@ -83,7 +86,7 @@ Serial::~Serial()
     }
 }
 
-int Serial::ReadData(char* buffer, unsigned int nbChar)
+int Cmycomm::ReadData(char* buffer, unsigned int nbChar)
 {
     //Number of bytes we'll have read
     DWORD bytesRead;
@@ -122,7 +125,7 @@ int Serial::ReadData(char* buffer, unsigned int nbChar)
 }
 
 
-bool Serial::WriteData(const char* buffer, unsigned int nbChar)
+bool Cmycomm::WriteData(const char* buffer, unsigned int nbChar)
 {
     DWORD bytesSend;
 
@@ -138,7 +141,7 @@ bool Serial::WriteData(const char* buffer, unsigned int nbChar)
         return true;
 }
 
-bool Serial::IsConnected()
+bool Cmycomm::IsConnected()
 {
     //Simply return the connection status
     return this->connected;
