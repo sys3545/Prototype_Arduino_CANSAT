@@ -1,7 +1,5 @@
 #include "pch.h"
 #include "Cmycomm.h"
-
-#include "Cmycomm.h"
 #include <tchar.h>
 
 Cmycomm::Cmycomm(const char* portName)
