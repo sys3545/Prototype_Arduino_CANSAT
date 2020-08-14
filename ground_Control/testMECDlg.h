@@ -4,13 +4,14 @@
 
 #pragma once
 #include "Cmycomm.h"
-
+#include "OScopeCtrl.h"
 
 // CtestMFCDlg 대화 상자
 class CtestMFCDlg : public CDialogEx
 {
 // 생성입니다.
-	Cmycomm* SP;
+	Cmycomm* SP; // 통신 시리얼 객체
+	COScopeCtrl* _rtGraph; // 오실로스코프 그래프 객체
 public:
 	CtestMFCDlg(CWnd* pParent = nullptr);	// 표준 생성자입니다.
 
@@ -34,8 +35,13 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 public:
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnDestroy();
+public:
 	afx_msg void OnBnClickedButton1();
 	afx_msg void OnBnClickedButton2();
 	afx_msg void OnBnClickedButton3();
 	afx_msg void OnBnClickedButton4();
+	afx_msg void OnBnClickedButtonSeon();
+	afx_msg void OnBnClickedButtonFold();
 };
