@@ -1,5 +1,5 @@
 # Prototype_Arduino_CANSAT
-- Prototype of Arduino CANSAT which will be launched on August 2021.
+- Prototype of CANSAT which will be launched on August 2021.
 - Prototype of CANSAT which will be exhibited during Capstone Event on January 2021.
 
 # Caution
@@ -22,4 +22,4 @@ Ground-Control
 Released version 0.0.0 (2020 08 01) : Base file was uploaded      
 Released version 0.0.1 (2020 08 03) : Test Serial Communication with Arduino and Ground_Control by using USB port (COM3)      
 Released version 0.0.2 (2020 08 08) : Function added, Bluetooth Serial Communication! We can do this with wireless (COM5)   
-Released version 0.0.3 (2020 08 14) : MFC Oscilloscope function was added, but it's just test-version yet   
+Released version 0.0.3 (2020 08 14) : MFC Oscilloscope function was added, but it's just a test-version yet   
