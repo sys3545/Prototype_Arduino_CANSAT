@@ -12,6 +12,7 @@ class CtestMFCDlg : public CDialogEx
 // 생성입니다.
 	Cmycomm* SP; // 통신 시리얼 객체
 	COScopeCtrl* _rtGraph; // 오실로스코프 그래프 객체
+	bool state = false;
 public:
 	CtestMFCDlg(CWnd* pParent = nullptr);	// 표준 생성자입니다.
 
