@@ -1,3 +1,42 @@
+#include "MyDelay.h"
+#include <SoftwareSerial.h>
+#define LED 14
+#define LDR A1
+
+SoftwareSerial BTSerial(9,10);
+int value=0;
+int mode=0;
+String str="M";
+char out[10]="";
+
+void setup() {
+  BTSerial.begin(9600);
+  pinMode(LED, OUTPUT);
+  pinMode(LDR, INPUT);
+}
+
+void loop() {
+  value = analogRead(LDR);
+
+  if(value >= 700){
+    mode=1;
+  }
+  else{
+    mode=0;
+  }
+  digitalWrite(LED, mode);
+  str+=String(value);
+  str+=String(mode);
+  str.toCharArray(out, str.length()+1);
+  BTSerial.write(out);
+  str="M";
+  strcpy(out, "");
+  delay(300);
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 #include <stdio.h>
 #include <string.h>
 #include <SoftwareSerial.h>
