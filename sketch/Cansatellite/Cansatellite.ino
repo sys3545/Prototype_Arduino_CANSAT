@@ -18,7 +18,7 @@ void setup() {
 void loop() {
   value = analogRead(LDR);
 
-  if(value >= 700){
+  if(value < 700){
     mode=1;
   }
   else{
