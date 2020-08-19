@@ -6,6 +6,11 @@
 #include "Cmycomm.h"
 #include "OScopeCtrl.h"
 
+typedef struct {
+	float LDR = 0;
+	float LED = 0;
+}data;
+
 // CtestMFCDlg 대화 상자
 class CtestMFCDlg : public CDialogEx
 {
@@ -13,6 +18,10 @@ class CtestMFCDlg : public CDialogEx
 	Cmycomm* SP; // 통신 시리얼 객체
 	COScopeCtrl* _rtGraph; // 오실로스코프 그래프 객체
 	bool state = false;
+	CString str;
+	char incomming[13]="";
+	int readResult = 0;
+	data input;
 public:
 	CtestMFCDlg(CWnd* pParent = nullptr);	// 표준 생성자입니다.
 
@@ -31,6 +40,7 @@ protected:
 
 	// 생성된 메시지 맵 함수
 	virtual BOOL OnInitDialog();
+	data pharsing(char msg[]);
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
