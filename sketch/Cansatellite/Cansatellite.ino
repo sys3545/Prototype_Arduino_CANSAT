@@ -18,7 +18,7 @@ void setup() {
 void loop() {
   value = analogRead(LDR);
 
-  if(value < 700){
+  if(value < 750){
     mode=1;
   }
   else{
@@ -31,7 +31,7 @@ void loop() {
   BTSerial.write(out);
   str="M";
   strcpy(out, "");
-  delay(300);
+  delay(100);
 }
 
 
