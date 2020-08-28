@@ -56,11 +56,13 @@ CtestMFCDlg::CtestMFCDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_TESTMFC_DIALOG, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	m_test = NULL;
 }
 
 void CtestMFCDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_OPENGL, m_pLeft);
 }
 
 BEGIN_MESSAGE_MAP(CtestMFCDlg, CDialogEx)
@@ -71,8 +73,6 @@ BEGIN_MESSAGE_MAP(CtestMFCDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON2, &CtestMFCDlg::OnBnClickedButton2)
 	ON_BN_CLICKED(IDC_BUTTON3, &CtestMFCDlg::OnBnClickedButton3)
 	ON_BN_CLICKED(IDC_BUTTON4, &CtestMFCDlg::OnBnClickedButton4)
-	ON_BN_CLICKED(IDC_BUTTON_SEON, &CtestMFCDlg::OnBnClickedButtonSeon)
-	ON_BN_CLICKED(IDC_BUTTON_FOLD, &CtestMFCDlg::OnBnClickedButtonFold)
 	ON_WM_TIMER()
 	ON_WM_DESTROY()
 END_MESSAGE_MAP()
@@ -112,7 +112,7 @@ BOOL CtestMFCDlg::OnInitDialog()
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
 	SetWindowText(_T("Ground Control"));
 	
-	// 오실로스코프 컨트롤이 위치할 영역 가져오기
+	// 오실로스코프 컨트롤이 위치할 영역 가져오기 - 초기화
 	CRect rtGraph;
 	GetDlgItem(IDC_STATIC_RT_GRAPH)->GetWindowRect(rtGraph);
 
@@ -120,7 +120,7 @@ BOOL CtestMFCDlg::OnInitDialog()
 
 	_rtGraph = new COScopeCtrl(3);		//cos,sin,tan 3개의 그래프 예약
 	_rtGraph->Create(WS_VISIBLE | WS_CHILD, rtGraph, this, IDC_STATIC_RT_GRAPH);
-	_rtGraph->SetRanges(400., 900.);
+	_rtGraph->SetRanges(400., 1000.);
 	_rtGraph->autofitYscale = true;
 	_rtGraph->SetYUnits("Value");
 	_rtGraph->SetXUnits("Time");
@@ -131,7 +131,24 @@ BOOL CtestMFCDlg::OnInitDialog()
 	_rtGraph->SetPlotColor(RGB(0, 255, 0), 1);
 	_rtGraph->SetPlotColor(RGB(0, 0, 255), 2);
 	_rtGraph->InvalidateCtrl();
-	SetTimer(1000, 10, NULL);
+
+	SetTimer(1000, 10, NULL); // 타이머 셋팅
+
+	CRect rectLeft;
+	int iWidth, iHeight;
+
+	m_pLeft.GetWindowRect(rectLeft);
+	iWidth = rectLeft.Width();
+	iHeight = rectLeft.Height();
+
+	m_test = new OPenGLRenderer;
+	CString className = AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW | CS_OWNDC, NULL, (HBRUSH)GetStockObject(WHITE_BRUSH), NULL);
+	m_test->CreateEx(0, className, _T("OpenGLCube"), WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, rectLeft, this, 0);
+	m_test->ShowWindow(SW_SHOW);
+
+	m_test->CreateGLContext(rectLeft, this);
+	m_test->PrepareScene(0, 0, iWidth, iHeight); //will show without this but as black & white.
+	m_test->SetTimer(1, 10, 0);
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -189,7 +206,7 @@ HCURSOR CtestMFCDlg::OnQueryDragIcon()
 void CtestMFCDlg::OnTimer(UINT_PTR nIDEvent)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-	if (state) {
+	if (state) { // 수신 값 받아오기
 		readResult = SP->ReadData(incomming, 13);
 		if (readResult && incomming[0] == 'M') {
 			incomming[readResult] = 0;
@@ -201,13 +218,15 @@ void CtestMFCDlg::OnTimer(UINT_PTR nIDEvent)
 			}
 		}
 	}
-
+	// 수신값 그래프 출력, OpenGL 변수 설정
 	if (nIDEvent == 1000 && state) {
 		double t = (double)GetTickCount() / 1000.;
 
 		double value[3] = { input.LDR, input.LED, 400 };
 
 		_rtGraph->AppendPoints(value);
+		m_test->xrot += input.LDR / 1000;
+		m_test->yrot += input.LDR / 1000;
 	}
 
 	CDialogEx::OnTimer(nIDEvent);
@@ -218,6 +237,7 @@ void CtestMFCDlg::OnDestroy()
 	CDialogEx::OnDestroy();
 
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
+	// 오실로스코프 삭제
 	delete _rtGraph;
 }
 
@@ -233,6 +253,9 @@ data CtestMFCDlg::pharsing(char msg[])
 	return temp;
 }
 
+
+////////////////////////////////////////// OpenGL ///////////////////////////////////////////////////////
+
 void CtestMFCDlg::OnBnClickedButton1()
 {
 	SP = new Cmycomm("\\\\.\\COM5");
@@ -244,7 +267,6 @@ void CtestMFCDlg::OnBnClickedButton1()
 
 }
 
-
 void CtestMFCDlg::OnBnClickedButton2()
 {	
 	if (SP->IsConnected()) {
@@ -253,7 +275,6 @@ void CtestMFCDlg::OnBnClickedButton2()
 		MessageBox(_T("Port Closed!"), _T("Caption"), MB_ICONINFORMATION);
 	}
 }
-
 
 void CtestMFCDlg::OnBnClickedButton3()
 {
@@ -281,16 +302,4 @@ void CtestMFCDlg::OnBnClickedButton4()
 			state = false;
 		}
 	}*/
-}
-
-
-void CtestMFCDlg::OnBnClickedButtonSeon()
-{
-	
-}
-
-
-void CtestMFCDlg::OnBnClickedButtonFold()
-{
-	
 }
