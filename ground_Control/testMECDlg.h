@@ -5,6 +5,7 @@
 #pragma once
 #include "Cmycomm.h"
 #include "OScopeCtrl.h"
+#include "OPenGLRenderer.h"
 
 typedef struct {
 	float LDR = 0;
@@ -17,11 +18,13 @@ class CtestMFCDlg : public CDialogEx
 // 생성입니다.
 	Cmycomm* SP; // 통신 시리얼 객체
 	COScopeCtrl* _rtGraph; // 오실로스코프 그래프 객체
-	bool state = false;
+	bool state = false; // 연결 유무
 	CString str;
 	char incomming[13]="";
 	int readResult = 0;
-	data input;
+	data input; // pharsing 완료 최종 데이터
+	CStatic m_pLeft;
+	OPenGLRenderer* m_test; // OpenGL 객체
 public:
 	CtestMFCDlg(CWnd* pParent = nullptr);	// 표준 생성자입니다.
 
@@ -32,7 +35,6 @@ public:
 
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 지원입니다.
-
 
 // 구현입니다.
 protected:
@@ -53,6 +55,4 @@ public:
 	afx_msg void OnBnClickedButton2();
 	afx_msg void OnBnClickedButton3();
 	afx_msg void OnBnClickedButton4();
-	afx_msg void OnBnClickedButtonSeon();
-	afx_msg void OnBnClickedButtonFold();
 };
