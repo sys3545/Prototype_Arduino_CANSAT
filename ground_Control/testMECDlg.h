@@ -17,14 +17,18 @@ class CtestMFCDlg : public CDialogEx
 {
 // 생성입니다.
 	Cmycomm* SP; // 통신 시리얼 객체
-	COScopeCtrl* _rtGraph; // 오실로스코프 그래프 객체
 	bool state = false; // 연결 유무
+
 	CString str;
-	char incomming[13]="";
+	char incomming[13] = "";
 	int readResult = 0;
 	data input; // pharsing 완료 최종 데이터
-	CStatic m_pLeft;
+
+	COScopeCtrl* _rtGraph; // 오실로스코프 그래프 객체
+	
+	CStatic m_pLeft; // picture 객체
 	OPenGLRenderer* m_test; // OpenGL 객체
+	
 public:
 	CtestMFCDlg(CWnd* pParent = nullptr);	// 표준 생성자입니다.
 
@@ -53,6 +57,7 @@ public:
 public:
 	afx_msg void OnBnClickedButton1();
 	afx_msg void OnBnClickedButton2();
-	afx_msg void OnBnClickedButton3();
-	afx_msg void OnBnClickedButton4();
+	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+	CBitmapButton m_wing; // connect button image
+	CBitmapButton m_wing2; // disconnect button image
 };
