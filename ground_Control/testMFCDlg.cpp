@@ -63,6 +63,8 @@ void CtestMFCDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_OPENGL, m_pLeft);
+	DDX_Control(pDX, IDC_BUTTON1, m_wing);
+	DDX_Control(pDX, IDC_BUTTON2, m_wing2);
 }
 
 BEGIN_MESSAGE_MAP(CtestMFCDlg, CDialogEx)
@@ -71,10 +73,9 @@ BEGIN_MESSAGE_MAP(CtestMFCDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON1, &CtestMFCDlg::OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_BUTTON2, &CtestMFCDlg::OnBnClickedButton2)
-	ON_BN_CLICKED(IDC_BUTTON3, &CtestMFCDlg::OnBnClickedButton3)
-	ON_BN_CLICKED(IDC_BUTTON4, &CtestMFCDlg::OnBnClickedButton4)
 	ON_WM_TIMER()
 	ON_WM_DESTROY()
+	ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
 
@@ -110,7 +111,14 @@ BOOL CtestMFCDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
-	SetWindowText(_T("Ground Control"));
+	SetWindowText(_T("Ground Control - SHIM EUN SONG")); // Window title 설정
+	SetBackgroundColor(RGB(255, 255, 255)); // Window 배경색 설정
+	SetDlgItemText(IDC_EDIT_ONOFF, _T("OFF")); // edit control 초기값 설정
+	
+	m_wing.LoadBitmaps(IDB_BITMAP2, NULL, NULL, NULL); // 연결 버튼 그림설정
+	m_wing.SizeToContent();// 크기 맞추기
+	m_wing2.LoadBitmaps(IDB_BITMAP3, NULL, NULL, NULL); // 연결해제 버튼 그림설정
+	m_wing2.SizeToContent();// 크기 맞추기
 	
 	// 오실로스코프 컨트롤이 위치할 영역 가져오기 - 초기화
 	CRect rtGraph;
@@ -122,7 +130,7 @@ BOOL CtestMFCDlg::OnInitDialog()
 	_rtGraph->Create(WS_VISIBLE | WS_CHILD, rtGraph, this, IDC_STATIC_RT_GRAPH);
 	_rtGraph->SetRanges(400., 1000.);
 	_rtGraph->autofitYscale = true;
-	_rtGraph->SetYUnits("Value");
+	_rtGraph->SetYUnits("");
 	_rtGraph->SetXUnits("Time");
 	_rtGraph->SetLegendLabel("LDR", 0);
 	_rtGraph->SetLegendLabel("LED", 1);
@@ -134,6 +142,7 @@ BOOL CtestMFCDlg::OnInitDialog()
 
 	SetTimer(1000, 10, NULL); // 타이머 셋팅
 
+	// OpenGL 생성 및 초기화 작업
 	CRect rectLeft;
 	int iWidth, iHeight;
 
@@ -214,7 +223,7 @@ void CtestMFCDlg::OnTimer(UINT_PTR nIDEvent)
 			
 			if (incomming[1] - '0' > 0) {
 				input = pharsing(incomming);
-				SetDlgItemText(IDC_EDIT1, str);
+				SetDlgItemText(IDC_EDIT_MSG, str);
 			}
 		}
 	}
@@ -227,6 +236,7 @@ void CtestMFCDlg::OnTimer(UINT_PTR nIDEvent)
 		_rtGraph->AppendPoints(value);
 		m_test->xrot += input.LDR / 1000;
 		m_test->yrot += input.LDR / 1000;
+		m_test->zrot += input.LDR / 1000;
 	}
 
 	CDialogEx::OnTimer(nIDEvent);
@@ -239,6 +249,17 @@ void CtestMFCDlg::OnDestroy()
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
 	// 오실로스코프 삭제
 	delete _rtGraph;
+}
+
+HBRUSH CtestMFCDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+{
+	HBRUSH hbr = CDialogEx::OnCtlColor(pDC, pWnd, nCtlColor);
+
+	// TODO:  여기서 DC의 특성을 변경합니다.
+
+	// TODO:  기본값이 적당하지 않으면 다른 브러시를 반환합니다.
+
+	return hbr;
 }
 
 data CtestMFCDlg::pharsing(char msg[]) 
@@ -254,7 +275,7 @@ data CtestMFCDlg::pharsing(char msg[])
 }
 
 
-////////////////////////////////////////// OpenGL ///////////////////////////////////////////////////////
+////////////////////////////////////////// Button ////////////////////////////////////////////////
 
 void CtestMFCDlg::OnBnClickedButton1()
 {
@@ -263,6 +284,7 @@ void CtestMFCDlg::OnBnClickedButton1()
 	if (SP->IsConnected()) {
 		state = true;
 		MessageBox(_T("Successful connected!"), _T("Caption"), MB_ICONINFORMATION);
+		SetDlgItemText(IDC_EDIT_ONOFF, _T("ON"));
 	}
 
 }
@@ -273,33 +295,6 @@ void CtestMFCDlg::OnBnClickedButton2()
 		SP->~Cmycomm();
 		state = false;
 		MessageBox(_T("Port Closed!"), _T("Caption"), MB_ICONINFORMATION);
+		SetDlgItemText(IDC_EDIT_ONOFF, _T("OFF"));
 	}
-}
-
-void CtestMFCDlg::OnBnClickedButton3()
-{
-	/*char onCommand[10] = "DEVON";
-
-	if (SP->IsConnected()) {
-		SP->WriteData(onCommand, 10);
-
-		if (state == false) {
-			state = true;
-		}
-	}*/
-}
-
-
-////////////////////////////////Not yet////////////////////////////////////
-void CtestMFCDlg::OnBnClickedButton4()
-{
-	/*char offCommand[6] = "DEVOF";
-
-	if (SP->IsConnected()) {
-		SP->WriteData(offCommand, 6);
-
-		if (state == true) {
-			state = false;
-		}
-	}*/
 }
