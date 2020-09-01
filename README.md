@@ -36,4 +36,10 @@ Complete comm department, it can show the values from Oscilloscope!
    
 Released version 0.1.0 (2020 08 28) :   
 RealTime postion is printed in OpenGL from oscilloscope value! openGL confirm.
+   
+Released version 0.1.1 (2020 09 01) :
+3D-Cube, parachute are printed in openGL replecting LDR value.   
+   
+  
+
 
