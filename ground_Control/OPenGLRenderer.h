@@ -3,6 +3,7 @@
 #include <glut.h>
 #include <gl\GL.h>
 #include <gl\GLU.h>
+#include <math.h>
 
 class OPenGLRenderer : public CWnd
 {
@@ -13,12 +14,14 @@ public:
 	void PrepareScene(int sx, int sy, int cx, int cy);				// Scene preparation
 	void DestroyScene();
 	int DrawGLScene();				//Here's where we do all the drawing
+	void createHalfSphere(GLfloat x, GLfloat y, GLfloat z, GLfloat radius); // draw half shpere
 	bool initAi();
 
 public:
 	GLfloat		xrot = 0;
 	GLfloat		yrot = 0;
 	GLfloat		zrot = 0;
+	GLfloat		GL_PI = 3.141592;
 protected:
 	bool InitContext(CWnd* parent);					 // Creates OpenGL Rendering Context
 
