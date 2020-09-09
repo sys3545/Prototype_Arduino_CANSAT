@@ -8,12 +8,14 @@
 #include "testMFCDlg.h"
 #include <math.h>
 #include <stdlib.h>
+#include <string>
 #include "afxdialogex.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
+using namespace std;
 
 // 응용 프로그램 정보에 사용되는 CAboutDlg 대화 상자입니다.
 
@@ -128,19 +130,19 @@ BOOL CtestMFCDlg::OnInitDialog()
 
 	_rtGraph = new COScopeCtrl(3);		//cos,sin,tan 3개의 그래프 예약
 	_rtGraph->Create(WS_VISIBLE | WS_CHILD, rtGraph, this, IDC_STATIC_RT_GRAPH);
-	_rtGraph->SetRanges(400., 1000.);
+	_rtGraph->SetRanges(-60., 60.);
 	_rtGraph->autofitYscale = true;
 	_rtGraph->SetYUnits("");
 	_rtGraph->SetXUnits("Time");
-	_rtGraph->SetLegendLabel("LDR", 0);
-	_rtGraph->SetLegendLabel("LED", 1);
-	_rtGraph->SetLegendLabel("test", 2);
+	_rtGraph->SetLegendLabel("PITCH", 0);
+	_rtGraph->SetLegendLabel("ROLL", 1);
+	_rtGraph->SetLegendLabel("YAW", 2);
 	_rtGraph->SetPlotColor(RGB(255, 0, 0), 0);
 	_rtGraph->SetPlotColor(RGB(0, 255, 0), 1);
 	_rtGraph->SetPlotColor(RGB(0, 0, 255), 2);
 	_rtGraph->InvalidateCtrl();
 
-	SetTimer(1000, 10, NULL); // 타이머 셋팅
+	SetTimer(1000, 10, NULL); // 타이머 셋팅 ( 실시간 그래프 )
 
 	// OpenGL 생성 및 초기화 작업
 	CRect rectLeft;
@@ -217,11 +219,11 @@ void CtestMFCDlg::OnTimer(UINT_PTR nIDEvent)
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	if (state) { // 수신 값 받아오기
 		readResult = SP->ReadData(incomming, 13);
-		if (readResult && incomming[0] == 'M') {
+		if (readResult && incomming[0] == 'M') { // 맨 앞 글자가 M이면 초기화 후 시작
 			incomming[readResult] = 0;
 			str = incomming;
 			
-			if (incomming[1] - '0' > 0) {
+			if (incomming[1] - '-' >= 0) { // 제대로 된 값이 들어왔을 때
 				input = pharsing(incomming);
 				SetDlgItemText(IDC_EDIT_MSG, str);
 			}
@@ -231,12 +233,12 @@ void CtestMFCDlg::OnTimer(UINT_PTR nIDEvent)
 	if (nIDEvent == 1000 && state) {
 		double t = (double)GetTickCount() / 1000.;
 
-		double value[3] = { input.LDR, input.LED, 400 };
+		double value[3] = { input.pitch, input.roll, input.yaw };
 
 		_rtGraph->AppendPoints(value);
-		m_test->xrot += input.LDR / 1000;
-		m_test->yrot += input.LDR / 1000;
-		m_test->zrot += input.LDR / 1000;
+		m_test->xrot = -input.pitch;
+		m_test->yrot = -input.yaw;
+		m_test->zrot = -input.roll;
 	}
 
 	CDialogEx::OnTimer(nIDEvent);
@@ -262,14 +264,93 @@ HBRUSH CtestMFCDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 	return hbr;
 }
 
-data CtestMFCDlg::pharsing(char msg[]) 
+// 받은 메세지를 데이터로 분리
+data_t CtestMFCDlg::pharsing(char msg[]) 
 {
-	data temp;
+	
+	data_t temp = { 0,0,0 };
+	bool isMinus = false;
+	string pitch="", roll="", yaw="";
+	int i = 1;
+	
+	//pitch
+	while (i<= strlen(msg)) {
+		if (msg[i] == 'E')
+			break;
 
-	temp.LDR = (float)(msg[1] - '0') * 100;
-	temp.LDR += (float)(msg[2] - '0') * 10;
-	temp.LDR += (float)(msg[3] - '0');
-	temp.LED = (float)(msg[4] - '0') * 600;
+		if (msg[i] == '-') {
+			isMinus = true;
+		}
+		else{
+			pitch += msg[i];
+		}
+		i++;
+	}
+	try {
+		temp.pitch = stoi(pitch);
+	}
+	catch (...) {
+		temp.pitch = input.pitch;
+	}
+	if (isMinus) {
+		temp.pitch = -temp.pitch;
+		isMinus = false;
+	}
+	
+	//roll
+	i++;
+	while (i <= strlen(msg)) {
+		if (msg[i] == 'E')
+			break;
+
+		if (msg[i] == '-') {
+			isMinus = true;
+		}
+		else
+		{
+			roll += msg[i];
+		}
+		i++;
+	}
+
+	try {
+		temp.roll = stoi(roll);
+	}
+	catch (...) {
+		temp.roll = input.roll;
+	}
+
+	if (isMinus) {
+		temp.roll = -temp.roll;
+		isMinus = false;
+	}
+	
+	//yaw
+	i++;
+	while (i <= strlen(msg)) {
+		if (msg[i] == 'E')
+			break;
+
+		if (msg[i] == '-') {
+			isMinus = true;
+		}
+		else
+		{
+			yaw += msg[i];
+		}
+		i++;
+	}
+	try {
+		temp.yaw = stoi(yaw);
+	}
+	catch (...) {
+		temp.yaw = input.yaw;
+	}
+	if (isMinus) {
+		temp.yaw = -temp.yaw;
+		isMinus = false;
+	}
+	i = 1;
 	
 	return temp;
 }
