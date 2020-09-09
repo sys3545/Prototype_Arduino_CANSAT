@@ -29,7 +29,7 @@ Released version 0.0.2 (2020 08 08) :
 Function added, Bluetooth Serial Communication! We can do this with wireless (COM5)   
    
 Released version 0.0.3 (2020 08 14) :    
-MFC Oscilloscope function was added, but it's just a test-version yet  
+MFC Oscilloscope function was added, but it's just a test-version yet.     
    
 Released version 0.0.4 (2020 08 19) :    
 Complete comm department, it can show the values from Oscilloscope!
@@ -40,6 +40,9 @@ RealTime postion is printed in OpenGL from oscilloscope value! openGL confirm.
 Released version 0.1.1 (2020 09 01) :   
 3D-Cube, parachute are printed in openGL replecting LDR value.   
    
+Released version 0.1.2 (2020 09 09) :   
+Position of cansat is printed in openGL replecting pitch, roll, yaw. it's first prototype version!  
+
   
 
 
