@@ -7,10 +7,12 @@
 #include "OScopeCtrl.h"
 #include "OPenGLRenderer.h"
 
+// MPU-6050의 회전각
 typedef struct {
-	float LDR = 0;
-	float LED = 0;
-}data;
+	float pitch = 0;
+	float roll = 0;
+	float yaw = 0;
+}data_t;
 
 // CtestMFCDlg 대화 상자
 class CtestMFCDlg : public CDialogEx
@@ -20,9 +22,9 @@ class CtestMFCDlg : public CDialogEx
 	bool state = false; // 연결 유무
 
 	CString str;
-	char incomming[13] = "";
+	char incomming[30] = "";
 	int readResult = 0;
-	data input; // pharsing 완료 최종 데이터
+	data_t input; // pharsing 완료 최종 데이터
 
 	COScopeCtrl* _rtGraph; // 오실로스코프 그래프 객체
 	
@@ -46,7 +48,7 @@ protected:
 
 	// 생성된 메시지 맵 함수
 	virtual BOOL OnInitDialog();
-	data pharsing(char msg[]);
+	data_t pharsing(char msg[]);
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
