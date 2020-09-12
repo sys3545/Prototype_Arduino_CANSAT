@@ -8,15 +8,12 @@
 # Missions
 
 Satellite
-- Turn on its LED when the spread command comes in.
-- Read illumination value and send it to Ground-Control.
+- Read Pitch, Roll, Yaw(PRY) value and send it to Ground-Control.
 
 Ground-Control
 - Connect with Satellite by using Bluetooth or Wifi.
-- Command Satellite to spread its wing.
-- Command Satellite to rotate its wing.
-- Print the illumination value transmitted from Satellite.
-- Command Satellite to fold its wing stably.
+- Print the PRY value transmitted from Satellite.
+- Draw the position of CANSAT using PRY value.
   
 # Version
 Released version 0.0.0 (2020 08 01) :   
