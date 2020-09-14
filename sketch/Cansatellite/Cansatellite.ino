@@ -115,7 +115,6 @@ void clacFilter(){
 }
 
 void setup() {
-  Serial.begin(9600);
   BTSerial.begin(9600);
 
   // join I2C bus (I2Cdev library doesn't do this automatically)
