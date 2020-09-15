@@ -39,7 +39,9 @@ Released version 0.1.1 (2020 09 01) :
    
 Released version 0.1.2 (2020 09 09) :   
 Position of cansat is printed in openGL replecting pitch, roll, yaw. it's first prototype version!  
-
+   
+Released version 0.1.3 (2020 09 15) :   
+Renovation of .ino, the position of cansat is printed precisely more than before.   
   
 
 
