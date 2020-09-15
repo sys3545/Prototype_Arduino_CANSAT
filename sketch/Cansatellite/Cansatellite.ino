@@ -22,7 +22,7 @@ void setup() {
   initMPU6050(); // MPU-6050 센서에 대한 초기 설정 함수
   BTSerial.begin(9600);
   calibAccelGyro(); // 센서 보정
-  initDT(); // 시간 간격에 대한 초기화 -> 현재 시각 저장, 전원이 ON 되면 그떄부터 측정 시작!
+  initDT(); // 시간 간격에 대한 초기화 -> 현재 시각 저장, 전원이 ON 되면 그떄부터 측정 시작
 }
 
 void loop() {
