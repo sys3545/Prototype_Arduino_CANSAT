@@ -13,8 +13,8 @@ float dt; // 측정시간 주기
 unsigned long t_now;  // 현재 측정 주기 시간
 unsigned long t_prev; // 이전 측정 주기 시간
 
-SoftwareSerial BTSerial(8, 9);
-String str="M";
+SoftwareSerial BTSerial(8, 9); // 블루투스 시리얼 객체
+String str="M"; 
 char out[30]="";
 
 ///////////////////////////// Main - Start ////////////////////////////////////
@@ -35,7 +35,7 @@ void loop() {
   static int cnt;
   cnt++;
   if(cnt%40 == 0)
-    makeStr();
+    makeStr(); // String 생성 및 전송
 }
 ///////////////////////////// Main - End ///////////////////////////////////////
 
@@ -105,7 +105,7 @@ void calcAccelYPR(){
   accel_y = AcY - baseAcY;
   accel_z = AcZ + (16384 - baseAcZ);
 
-  //직석 +X축이 기울어진 각도 구함
+  //직선 +X축이 기울어진 각도 구함
   accel_yz = sqrt(pow(accel_y, 2) + pow(accel_z, 2));
   accel_angle_y = atan(-accel_x / accel_yz)*RADIANS_TO_DEGREES;
 
@@ -152,15 +152,9 @@ void makeStr(){
   str+=String((int)filtered_angle_z);
   str+=String('E');
   str.toCharArray(out, str.length()+1);
-  BTSerial.write(out);
-  /*BTSerial.print(filtered_angle_x);
-  BTSerial.print('\t');
-  BTSerial.print(filtered_angle_y);
-  BTSerial.print('\t');
-  BTSerial.print(filtered_angle_z);
-  BTSerial.print('\t');
-  BTSerial.print(dt);
-  BTSerial.println(" ");*/
+  BTSerial.write(out); // 전송
+  
+  // 전송 후 초기화
   str="M";
   strcpy(out, "");
 }
