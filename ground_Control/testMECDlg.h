@@ -7,7 +7,6 @@
 #include "OScopeCtrl.h"
 #include "OPenGLRenderer.h"
 
-// MPU-6050의 회전각
 typedef struct {
 	float pitch = 0;
 	float roll = 0;
@@ -21,10 +20,12 @@ class CtestMFCDlg : public CDialogEx
 	Cmycomm* SP; // 통신 시리얼 객체
 	bool state = false; // 연결 유무
 
-	CString str;
+	CString str; // 최종메세지
 	char incomming[30] = "";
 	int readResult = 0;
+
 	data_t input; // pharsing 완료 최종 데이터
+	CString str_pitch, str_roll, str_yaw;
 
 	COScopeCtrl* _rtGraph; // 오실로스코프 그래프 객체
 	
