@@ -213,7 +213,7 @@ HCURSOR CtestMFCDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-// 오실로스코프 관련 함수
+/////////////////////////////////// 오실로스코프 관련 함수, 데이터 읽기 ////////////////////////////////////////////
 void CtestMFCDlg::OnTimer(UINT_PTR nIDEvent)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
@@ -226,6 +226,12 @@ void CtestMFCDlg::OnTimer(UINT_PTR nIDEvent)
 			if (incomming[1] - '-' >= 0) { // 제대로 된 값이 들어왔을 때
 				input = pharsing(incomming);
 				SetDlgItemText(IDC_EDIT_MSG, str);
+				str_pitch.Format(_T("%d"), (int)input.pitch);
+				SetDlgItemText(IDC_EDIT_PITCH, str_pitch);
+				str_roll.Format(_T("%d"), (int)input.roll);
+				SetDlgItemText(IDC_EDIT_ROLL, str_roll);
+				str_yaw.Format(_T("%d"), (int)input.yaw);
+				SetDlgItemText(IDC_EDIT_YAW, str_yaw);
 			}
 		}
 	}
@@ -237,7 +243,7 @@ void CtestMFCDlg::OnTimer(UINT_PTR nIDEvent)
 
 		_rtGraph->AppendPoints(value);
 		m_test->xrot = -input.pitch;
-		m_test->yrot = -input.yaw;
+		m_test->yrot =  input.yaw;
 		m_test->zrot = -input.roll;
 	}
 
@@ -271,7 +277,7 @@ data_t CtestMFCDlg::pharsing(char msg[])
 	data_t temp = { 0,0,0 };
 	bool isMinus = false;
 	string pitch="", roll="", yaw="";
-	int i = 1;
+	unsigned int i = 1;
 	
 	//pitch
 	while (i<= strlen(msg)) {
