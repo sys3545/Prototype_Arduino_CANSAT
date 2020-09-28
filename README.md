@@ -42,6 +42,9 @@ Position of cansat is printed in openGL replecting pitch, roll, yaw. it's first 
    
 Released version 0.1.3 (2020 09 15) :   
 Renovation of .ino, the position of cansat is printed precisely more than before.   
+   
+Released version 0.1.4 (2020 09 28) :   
+Each of P, Y, R is printed.   
   
 
 
