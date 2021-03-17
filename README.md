@@ -14,7 +14,11 @@ Ground-Control
 - Connect with Satellite by using Bluetooth or Wifi.
 - Print the PRY value transmitted from Satellite.
 - Draw the position of CANSAT using PRY value.
-  
+   
+# Example screen
+<img width="810" alt="conn" src="https://user-images.githubusercontent.com/61923882/111418355-eb3dbc80-872a-11eb-9fda-0e7b42ae9c8f.PNG">
+   
+   
 # Version
 Released version 0.0.0 (2020 08 01) :   
 Base file was uploaded      
